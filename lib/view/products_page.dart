@@ -18,7 +18,7 @@ class _ProductsPageState extends State<ProductsPageWithButton> {
       floatingActionButton: FloatingActionButton(
         heroTag: "fab1",
         onPressed: () async {
-          products = await ProductService().getAllProducts();
+          products = await ProductService().getAll();
           setState(() {});
         },
         child: Icon(Icons.get_app),

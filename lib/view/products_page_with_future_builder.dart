@@ -18,8 +18,8 @@ class _ProductsPageWithFutureBuilderState
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          bool isProductCreated = await ProductService().createProduct(
-            newProduct: ProductModel(
+          bool isProductCreated = await ProductService().create(
+            newItem: ProductModel(
               title: "title",
               description: "description",
               image: "image.net",
@@ -53,12 +53,12 @@ class _ProductsPageWithFutureBuilderState
         ],
       ),
       body: FutureBuilder(
-        future: ProductService().getAllProducts(),
+        future: ProductService().getAll(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<ProductModel> products = snapshot.data!;
             return ListView.builder(
-              itemCount: snapshot.data!.length,
+              itemCount: products.length,
               itemBuilder: (context, index) {
                 // print(snapshot.data);
                 return Card(

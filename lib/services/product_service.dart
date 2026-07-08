@@ -1,13 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:rest_api_session_14/core/services/base_service.dart';
 import 'package:rest_api_session_14/models/product_model.dart';
 
-class ProductService {
-  Dio dio = Dio();
-  late Response response;
-  final String baseUrl = 'https://fakestoreapi.com';
+class ProductService extends BaseService<ProductModel> {
   final String entity = "products";
 
-  Future<List<ProductModel>?> getAllProducts() async {
+  @override
+  Future<List<ProductModel>?> getAll() async {
     try {
       response = await dio.get("$baseUrl/$entity");
       if (response.statusCode == 200) {
@@ -26,9 +25,10 @@ class ProductService {
     }
   }
 
-  Future<ProductModel?> getOneProduct({required int productId}) async {
+  @override
+  Future<ProductModel?> getOne({required int itemId}) async {
     try {
-      response = await dio.get("$baseUrl/$entity/$productId");
+      response = await dio.get("$baseUrl/$entity/$itemId");
       if (response.statusCode == 200) {
         ProductModel product = ProductModel.fromMap(response.data);
         return product;
@@ -41,9 +41,10 @@ class ProductService {
     }
   }
 
-  Future<bool> createProduct({required ProductModel newProduct}) async {
+  @override
+  Future<bool> create({required ProductModel newItem}) async {
     try {
-      response = await dio.post("$baseUrl/$entity", data: newProduct.toMap());
+      response = await dio.post("$baseUrl/$entity", data: newItem.toMap());
       if (response.statusCode == 201) {
         print(response.data);
         return true;
@@ -56,11 +57,12 @@ class ProductService {
     }
   }
 
-  Future<bool> updateProduct({required ProductModel updatedProduct}) async {
+  @override
+  Future<bool> update({required ProductModel updatedItem}) async {
     try {
       response = await dio.put(
-        "$baseUrl/$entity/${updatedProduct.id}",
-        data: updatedProduct.toMap(),
+        "$baseUrl/$entity/${updatedItem.id}",
+        data: updatedItem.toMap(),
       );
       if (response.statusCode == 200) {
         return true;
@@ -73,9 +75,10 @@ class ProductService {
     }
   }
 
-  Future<bool> deleteProduct({required int deletedProductId}) async {
+  @override
+  Future<bool> delete({required int deletedItemId}) async {
     try {
-      response = await dio.delete("$baseUrl/$entity/$deletedProductId");
+      response = await dio.delete("$baseUrl/$entity/$deletedItemId");
       if (response.statusCode == 200) {
         return true;
       } else {

@@ -9,7 +9,7 @@ class OneProductPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: FutureBuilder(
-        future: ProductService().getOneProduct(productId: 10),
+        future: ProductService().getOne(itemId: 10),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Center(
