@@ -1,3 +1,4 @@
+import 'package:auth_example/core/config/service_locator.dart';
 import 'package:auth_example/models/login_model.dart';
 import 'package:auth_example/services/auth_service.dart';
 import 'package:auth_example/view/profile_view.dart';
@@ -43,10 +44,9 @@ class _LoginViewState extends State<LoginView> {
                 FilledButton(
                   onPressed: () async {
                     isLoading = true;
-                    setState(() {
-                      
-                    });
-                    bool isLogged = await AuthService().login(
+                    setState(() {});
+                    AuthService auth = getIt.get<AuthService>();
+                    bool isLogged = await auth.login(
                       loginInfo: LoginModel(
                         username: username.text,
                         password: password.text,
@@ -66,9 +66,7 @@ class _LoginViewState extends State<LoginView> {
                       );
                     }
                     isLoading = false;
-                    setState(() {
-                      
-                    });
+                    setState(() {});
                   },
                   child: Text("Login"),
                 ),
