@@ -3,7 +3,6 @@ import 'package:bloc_example/blocs/counter_bloc/counter_event.dart';
 import 'package:bloc_example/blocs/counter_bloc/counter_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 class CounterPage extends StatelessWidget {
   const CounterPage({super.key});
@@ -53,14 +52,14 @@ class CounterPage extends StatelessWidget {
             body: Center(
               child: BlocBuilder<CounterBloc, CounterState>(
                 builder: (context, state) {
-                  if (state is CounterHasIncreamented) {
-                    return Text(state.newValueOfCounterafterAdding.toString());
-                  } else if (state is CounterHasDecreamented) {
-                    return Text(state.newValueOfCounterafterSub.toString());
-                  } else if (state is CounterHasReset) {
-                    return Text("0");
+                  print(state.runtimeType);
+                  if (state is CounterValueChanged) {
+                    return Text(
+                      state.counterValue.toString(),
+                      style: TextStyle(fontSize: 50),
+                    );
                   } else {
-                    return Text("0");
+                    return Text("0", style: TextStyle(fontSize: 50));
                   }
                 },
               ),

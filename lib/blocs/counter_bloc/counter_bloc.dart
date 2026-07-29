@@ -6,20 +6,21 @@ import 'counter_event.dart';
 class CounterBloc extends Bloc<CounterEvent, CounterState> {
   int counter = 0;
   CounterBloc() : super(InitCounter()) {
-    
     on<IncreamentCounter>((event, emit) {
       counter++;
-      emit(CounterHasIncreamented(newValueOfCounterafterAdding: counter));
+      emit(CounterValueChanged(counterValue: counter));
     });
 
     on<DecreamentCounter>((event, emit) {
-      counter--;
-      emit(CounterHasDecreamented(newValueOfCounterafterSub: counter));
+      if (counter > 0) {
+        counter--;
+      }
+      emit(CounterValueChanged(counterValue: counter));
     });
 
     on<ResetCounter>((event, emit) {
       counter = 0;
-      emit(CounterHasReset());
+      emit(CounterValueChanged(counterValue: counter));
     });
   }
 }

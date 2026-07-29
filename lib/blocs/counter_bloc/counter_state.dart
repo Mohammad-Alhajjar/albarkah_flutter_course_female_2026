@@ -1,17 +1,9 @@
-class CounterState {}
+abstract class CounterState {}
 
-class CounterHasIncreamented extends CounterState {
-  final int newValueOfCounterafterAdding;
+class CounterValueChanged extends CounterState {
+  final int counterValue;
 
-  CounterHasIncreamented({required this.newValueOfCounterafterAdding});
+  CounterValueChanged({required this.counterValue});
 }
-
-class CounterHasDecreamented extends CounterState {
-  final int newValueOfCounterafterSub;
-
-  CounterHasDecreamented({required this.newValueOfCounterafterSub});
-}
-
-class CounterHasReset extends CounterState {}
 
 class InitCounter extends CounterState {}
