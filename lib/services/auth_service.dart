@@ -14,6 +14,7 @@ class AuthService {
     required this.appPrefrences,
     //  required this.dio
   });
+
   Future<void> login({required LoginModel loginModel}) async {
     // Response response = await dio.post("url", data: loginModel.toMap());
 
@@ -58,7 +59,11 @@ class AuthService {
     return appPrefrences.isOnboardingCompleted();
   }
 
-  Future<bool> isAuthenticated() async {
+  Future<void> completeOnboarding() {
+    return appPrefrences.completeOnboarding();
+  }
+
+  Future<bool> restoreSession() async {
     UserSession? userSession = await secureSessionStorage.getSession();
     return userSession != null ? true : false;
   }

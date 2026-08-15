@@ -5,7 +5,4 @@ GetIt getIt = GetIt.instance;
 
 Future<void> setup() async {
   getIt.registerSingleton(await SharedPreferences.getInstance());
-
-
-  
 }
