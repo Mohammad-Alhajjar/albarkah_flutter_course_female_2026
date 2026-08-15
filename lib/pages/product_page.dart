@@ -14,7 +14,33 @@ class ProductPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var productsListener = ref.watch(productProvider);
+
+    ref.listen(productProvider, (previous, next) {
+      if (previous!.isLoading && next.hasValue) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Data Fetched ... "),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+      if (next.hasError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error while fetching data ... "),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    });
+
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          ref.read(productProvider.notifier).refreshProducts();
+        },
+        child: Icon(Icons.refresh),
+      ),
       appBar: AppBar(title: Text("Products Page")),
       body: productsListener.when(
         data: (products) {

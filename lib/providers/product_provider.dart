@@ -12,12 +12,28 @@ class ProductAsyncNotifierProvider extends AsyncNotifier<List<ProductModel>> {
   @override
   Future<List<ProductModel>> build() async {
     var productService = ref.read(productServiceProvider);
+
+    // ProductService productService = ProductService();
+
     List<ProductModel>? productsResult = await productService.getAllProducts();
-    
+
     if (productsResult == null) {
-      throw Exception("failed to fecth data.");
+      throw Exception("failed to fecth data. with build function");
     }
 
     return productsResult;
+  }
+
+  Future<void> refreshProducts() async {
+    state = AsyncLoading();
+
+    var productService = ref.read(productServiceProvider);
+    List<ProductModel>? productsResult = await productService.getAllProducts();
+
+    if (productsResult == null) {
+      state = AsyncError("failed to fecth data. with refresh function", StackTrace.current);
+      return;
+    }
+    state = AsyncData(productsResult);
   }
 }
