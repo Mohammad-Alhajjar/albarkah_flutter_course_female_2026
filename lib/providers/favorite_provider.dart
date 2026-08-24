@@ -14,20 +14,24 @@ class FavoriteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> togglrFavorite(ProductModel product) async {
+  Future<void> toggleFavorite({required ProductModel product}) async {
     await favoriteRepo.toggleFavorite(product: product);
+
     List<dynamic> productMaps = List.generate(favoriteProducts.length, (index) {
       return favoriteProducts[index].toMap();
     });
+
     bool isCurrentlyFavorite = favoriteProducts.any((element) {
       return element.id == product.id;
     });
+
     if (isCurrentlyFavorite) {
-      favoriteProducts.where((element) {
+      favoriteProducts = favoriteProducts.where((element) {
         return element.id != product.id;
-      });
+      }).toList();
     } else {
       favoriteProducts = [...favoriteProducts, product];
+      // favoriteProducts.add(product);
     }
     notifyListeners();
   }

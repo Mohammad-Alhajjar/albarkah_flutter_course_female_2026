@@ -1,21 +1,43 @@
+import 'package:favorite_example/datasources/favorite_local_datasource.dart';
 import 'package:favorite_example/datasources/products_remote_data_source.dart';
+import 'package:favorite_example/main.dart';
 import 'package:favorite_example/pages/favorites_page.dart';
+import 'package:favorite_example/providers/favorite_provider.dart';
 import 'package:favorite_example/providers/product_provider.dart';
+import 'package:favorite_example/repos/favorite_repo.dart';
 import 'package:favorite_example/repos/product_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ProductProvider(
-        productRepo: ProductRepo(
-          productsRemoteDataSource: ProductsRemoteDataSource(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => ProductProvider(
+            productRepo: ProductRepo(
+              productsRemoteDataSource: ProductsRemoteDataSource(),
+            ),
+          )..getProducts(),
         ),
-      )..getProducts(),
+        ChangeNotifierProvider(
+          create: (context) => FavoriteProvider(
+            favoriteRepo: FavoriteRepo(
+              favoriteLocalDatasource: FavoriteLocalDatasource(
+                box: favoritesBox,
+              ),
+            ),
+          )..getFavoriteProduct(),
+        ),
+      ],
       child: Builder(
         builder: (context) {
           return Scaffold(
@@ -55,11 +77,30 @@ class HomePage extends StatelessWidget {
                           subtitle: Text(
                             productProvider.products[index].price.toString(),
                           ),
-                          trailing: CircleAvatar(
-                            child: Icon(
-                              Icons.favorite_outline_rounded,
-                              color: Colors.grey,
-                            ),
+                          trailing: Consumer<FavoriteProvider>(
+                            builder: (context, favoriteProvider, _) {
+                              return CircleAvatar(
+                                child: IconButton(
+                                  onPressed: () {
+                                    context
+                                        .read<FavoriteProvider>()
+                                        .toggleFavorite(
+                                          product:
+                                              productProvider.products[index],
+                                        );
+                                  },
+                                  icon:
+                                      favoriteProvider.isProductFavorite(
+                                        productProvider.products[index],
+                                      )
+                                      ? Icon(Icons.favorite, color: Colors.red)
+                                      : Icon(
+                                          Icons.favorite_outline_rounded,
+                                          color: Colors.grey,
+                                        ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       );

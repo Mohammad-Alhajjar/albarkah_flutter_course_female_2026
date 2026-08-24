@@ -15,16 +15,14 @@ class FavoriteLocalDatasource {
   }
 
   Future<void> toggleFavorite({required ProductModel product}) async {
+    
     List<dynamic> favoriteData = box.values.toList();
     List<ProductModel> favoriteProducts = List.generate(
       favoriteData.length,
       (index) => ProductModel.fromMap(favoriteData[index]),
     );
-    bool isCurrentlyFavorite = favoriteProducts.any((element) {
-      return element.id == product.id;
-    });
 
-    if (isCurrentlyFavorite) {
+    if (box.containsKey(product.id)) {
       await box.delete(product.id);
     } else {
       box.put(product.id, product.toMap());

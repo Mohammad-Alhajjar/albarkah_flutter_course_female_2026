@@ -12,7 +12,5 @@ class FavoriteRepo {
 
   Future<void> toggleFavorite({required ProductModel product}) async {
     await favoriteLocalDatasource.toggleFavorite(product: product);
-
-    
   }
 }

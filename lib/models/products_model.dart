@@ -42,7 +42,7 @@ class ProductModel {
 
     String toJson() => json.encode(toMap());
 
-    factory ProductModel.fromMap(Map<String, dynamic> json) => ProductModel(
+    factory ProductModel.fromMap(Map<dynamic, dynamic> json) => ProductModel(
         id: json["id"],
         title: json["title"],
         price: json["price"]?.toDouble(),
@@ -85,7 +85,7 @@ class Rating {
 
     String toJson() => json.encode(toMap());
 
-    factory Rating.fromMap(Map<String, dynamic> json) => Rating(
+    factory Rating.fromMap(Map<dynamic, dynamic> json) => Rating(
         rate: json["rate"]?.toDouble(),
         count: json["count"],
     );
