@@ -26,9 +26,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomePage(cartBox: cartBox),
+    return BlocProvider(
+      create: (context) => CartBloc(cartBox: cartBox)..add(LoadCartItems()),
+      child: MaterialApp(debugShowCheckedModeBanner: false, home: HomePage()),
     );
   }
 }

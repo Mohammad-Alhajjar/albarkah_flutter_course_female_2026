@@ -21,39 +21,82 @@ class CartPage extends StatelessWidget {
                   if (state.cartItems.isEmpty) {
                     return Center(child: Text("No Products in Cart yet...."));
                   }
-                  return ListView.builder(
-                    itemCount: state.cartItems.length,
-                    itemBuilder: (context, index) {
-                      ProductModel product = state.cartItems[index].product;
-                      return Card(
-                        child: ListTile(
-                          leading: Image.network(product.image!),
-                          title: Text(product.title!),
-                          subtitle: Text(
-                            "${product.category} - ${product.price}",
-                          ),
-                          trailing: SizedBox(
-                            width: 150,
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.add_circle_outline),
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: state.cartItems.length,
+                          itemBuilder: (context, index) {
+                            ProductModel product =
+                                state.cartItems[index].product;
+                            return Card(
+                              child: ListTile(
+                                leading: Image.network(product.image!),
+                                title: Text(product.title!),
+                                subtitle: Text(
+                                  "${product.category} - ${product.price}",
                                 ),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.remove_circle_outline),
+                                trailing: SizedBox(
+                                  width: 150,
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {
+                                          context.read<CartBloc>().add(
+                                            UpdateQuantity(
+                                              tempId: product.id!,
+                                              newQuantity:
+                                                  state
+                                                      .cartItems[index]
+                                                      .quatity +
+                                                  1,
+                                            ),
+                                          );
+                                        },
+                                        icon: Icon(Icons.add_circle_outline),
+                                      ),
+                                      Text(
+                                        state.cartItems[index].quatity
+                                            .toString(),
+                                        style: TextStyle(fontSize: 22),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          context.read<CartBloc>().add(
+                                            UpdateQuantity(
+                                              tempId: product.id!,
+                                              newQuantity:
+                                                  state
+                                                      .cartItems[index]
+                                                      .quatity -
+                                                  1,
+                                            ),
+                                          );
+                                        },
+                                        icon: Icon(Icons.remove_circle_outline),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          context.read<CartBloc>().add(
+                                            RemoveFromCart(itemId: product.id!),
+                                          );
+                                        },
+                                        icon: Icon(Icons.delete),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.delete),
-                                ),
-                              ],
-                            ),
-                          ),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        state.totalPrice.toString(),
+                        style: TextStyle(fontSize: 30),
+                      ),
+                    ],
                   );
                 }
                 return SizedBox.shrink();
