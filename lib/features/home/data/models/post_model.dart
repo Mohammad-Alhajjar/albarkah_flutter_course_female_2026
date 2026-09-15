@@ -2,8 +2,30 @@
 import 'dart:convert';
 
 import 'package:clean_arch_example/features/home/domain/entities/post_entity.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class PostModel extends PostEntity{
+part 'post_model.g.dart';
+
+@HiveType(typeId: 0)
+@JsonSerializable()
+class PostModel extends PostEntity {
+
+  // @JsonKey(name: "id")
+  // @HiveField(0)
+  // final int? id;
+
+
+  // @JsonKey(name: "title")
+  // @HiveField(1)
+  // final String? title;
+
+
+  // @JsonKey(name: "body")
+  // @HiveField(2)
+  // final String? body;
+
+  // PostModel({this.id, this.title, this.body});
 
   PostModel({super.id, super.title, super.body});
 
@@ -15,22 +37,10 @@ class PostModel extends PostEntity{
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{'id': id, 'title': title, 'body': body};
-  }
+  Map<String, dynamic> toMap() => _$PostModelToJson(this);
 
-  factory PostModel.fromMap(Map<String, dynamic> map) {
-    return PostModel(
-      id: map['id'] != null ? map['id'] as int : -1,
-      title: map['title'] != null ? map['title'] as String : "unknown title",
-      body: map['body'] != null ? map['body'] as String : "unknown body",
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory PostModel.fromJson(String source) =>
-      PostModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory PostModel.fromMap(Map<String, dynamic> json) =>
+      _$PostModelFromJson(json);
 
   @override
   String toString() => 'PostModel(id: $id, title: $title, body: $body)';

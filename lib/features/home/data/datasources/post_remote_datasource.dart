@@ -1,15 +1,28 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:clean_arch_example/core/errors/exceptions.dart';
 import 'package:clean_arch_example/core/resources/app_url.dart';
 import 'package:clean_arch_example/features/home/data/models/post_model.dart';
 import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+
+// part 'post_remote_datasource.g.dart';
 
 abstract class PostRemoteDatasource {
   Future<List<PostModel>> getPosts();
-  Future<PostModel> getPost({required int postId});
-  Future<bool> createPost({required PostModel newPost});
-  Future<bool> updatePost({required PostModel updatedPost});
-  Future<bool> deletePost({required int deletedPostId});
+  // Future<PostModel> getPost({required int postId});
+  // Future<bool> createPost({required PostModel newPost});
+  // Future<bool> updatePost({required PostModel updatedPost});
+  // Future<bool> deletePost({required int deletedPostId});
 }
+
+// @RestApi(baseUrl: AppUrl.baseUrl)
+// abstract class PostRemoteDatasourceImpl implements PostRemoteDatasource {
+//   factory PostRemoteDatasourceImpl(Dio dio) = _PostRemoteDatasourceImpl;
+
+//   @override
+//   @GET("/posts")
+//   Future<List<PostModel>> getPosts();
+// }
 
 class PostRemoteDatasourceImplWithDio extends PostRemoteDatasource {
   Dio dio;
@@ -35,6 +48,7 @@ class PostRemoteDatasourceImplWithDio extends PostRemoteDatasource {
 
   @override
   Future<List<PostModel>> getPosts() async {
+    print("==========================Remote Datasource");
     try {
       Response response = await dio.get(AppUrl.posts);
       if (response.statusCode == 200) {
@@ -43,11 +57,11 @@ class PostRemoteDatasourceImplWithDio extends PostRemoteDatasource {
           (index) => PostModel.fromMap(response.data[index]),
         );
       } else {
-        throw Exception();
+        throw ServerException();
       }
     } catch (e) {
       print(e);
-      throw Exception();
+      throw ServerException();
     }
   }
 
